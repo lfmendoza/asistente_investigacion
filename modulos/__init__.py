@@ -1,8 +1,11 @@
 """
 Paquete de módulos para el asistente de investigación digital.
 """
-from . import buscador
+# Este archivo hace que el directorio 'modulos' sea reconocido como un paquete Python
+# Importamos los módulos para facilitar su acceso
+from . import buscador_alternative
 from . import procesador
-from . import visualizador
+from . import visualizador_simple
 
-__all__ = ['buscador', 'procesador', 'visualizador']
+# Definir explícitamente qué módulos se pueden importar
+__all__ = ['buscador_alternative', 'procesador', 'visualizador_simple']

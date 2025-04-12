@@ -1,6 +1,8 @@
 """
 Módulo para visualización de datos y generación de gráficos de frecuencia de palabras.
 """
+import matplotlib
+matplotlib.use('Agg')  # Usar backend que no requiere GUI
 import matplotlib.pyplot as plt
 import numpy as np
 from collections import Counter

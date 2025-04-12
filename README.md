@@ -22,8 +22,8 @@ Esta aplicación web interactiva funciona como un asistente de investigación di
 1. Clonar el repositorio:
 
    ```bash
-   git clone https://github.com/lfmendoza/asistente_investigacion.git
-   cd asistente_investigacion
+   git clone https://github.com/tu-usuario/asistente-investigacion.git
+   cd asistente-investigacion
    ```
 
 2. Crear y activar un entorno virtual (opcional pero recomendado):
@@ -118,7 +118,6 @@ Funciones principales:
 ## 🛠️ Tecnologías utilizadas
 
 - **Streamlit**: Para la interfaz de usuario web
-- **LangChain**: Para la integración de modelos de lenguaje y herramientas
 - **OpenAI API**: Para el procesamiento de lenguaje natural
 - **Tavily API**: Para la búsqueda de información en la web
 - **Matplotlib**: Para la visualización de datos
@@ -131,9 +130,6 @@ streamlit==1.32.0
 requests==2.31.0
 openai==1.12.0
 python-dotenv==1.0.0
-langchain==0.1.4
-langchain-openai==0.0.5
-tavily-python==0.2.8
 matplotlib==3.8.2
 ```
 

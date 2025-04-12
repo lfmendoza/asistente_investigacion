@@ -1,18 +1,17 @@
 """
-Aplicación Streamlit para asistente de investigación digital.
+Aplicación Streamlit para asistente de investigación digital (versión simplificada).
 """
 import os
 import streamlit as st
 from dotenv import load_dotenv
-import time
 
 # Cargar variables de entorno
 load_dotenv()
 
 # Importar módulos personalizados
-from modulos.buscador import realizar_busqueda, obtener_texto_completo
+from modulos.buscador_alternative import realizar_busqueda, obtener_texto_completo
 from modulos.procesador import generar_resumen, preprocesar_texto_para_wordcloud
-from modulos.visualizador import generar_grafico_palabras, contar_palabras_frecuentes
+from modulos.visualizador_simple import contar_palabras_frecuentes, generar_tabla_html
 
 # Configuración de la página
 st.set_page_config(
@@ -30,15 +29,15 @@ analiza el contenido utilizando modelos de lenguaje y presenta un resumen junto 
 
 # Verificar las claves API
 if not os.getenv("OPENAI_API_KEY") or not os.getenv("TAVILY_API_KEY"):
-    st.error("""
-    ⚠️ Se requieren claves API para el funcionamiento correcto.
+    st.warning("""
+    ⚠️ No se encontraron claves API. La aplicación funcionará en modo simulado.
     
+    Para habilitar todas las funcionalidades:
     1. Copia el archivo `.env.example` a `.env`
     2. Agrega tus claves API:
        - OPENAI_API_KEY: Obtén una clave en [OpenAI](https://platform.openai.com)
        - TAVILY_API_KEY: Obtén una clave en [Tavily](https://tavily.com)
     """)
-    st.stop()
 
 # Formulario de búsqueda
 with st.form("formulario_busqueda"):
@@ -88,26 +87,16 @@ if boton_buscar and tema:
         estado.info("🔄 Procesando texto para visualización...")
         texto_procesado = preprocesar_texto_para_wordcloud(texto_completo)
         
-        # Generar visualización de palabras frecuentes
-        estado.info("📊 Generando visualización...")
-        grafico_palabras_img = generar_grafico_palabras(texto_procesado)
-        
-        # Crear columnas para visualizaciones
-        col1, col2 = st.columns(2)
-        
-        # Mostrar gráfico de palabras
-        with col1:
-            st.subheader("Frecuencia de Palabras")
-            st.markdown(f'<img src="data:image/png;base64,{grafico_palabras_img}" alt="Gráfico de palabras frecuentes" width="100%">', unsafe_allow_html=True)
-        
         # Contar palabras frecuentes
-        palabras_frecuentes = contar_palabras_frecuentes(texto_procesado, n=15)
+        palabras_frecuentes = contar_palabras_frecuentes(texto_procesado, n=20)
         
-        # Mostrar palabras frecuentes
-        with col2:
-            st.subheader("Palabras más frecuentes")
-            for palabra, frecuencia in palabras_frecuentes.items():
-                st.write(f"- **{palabra}**: {frecuencia}")
+        # Generar tabla HTML
+        estado.info("📊 Generando visualización...")
+        tabla_html = generar_tabla_html(palabras_frecuentes)
+        
+        # Mostrar visualización
+        st.subheader("Frecuencia de Palabras")
+        st.markdown(tabla_html, unsafe_allow_html=True)
         
         # Limpiar estado
         estado.success("✅ Análisis completo")
@@ -122,7 +111,7 @@ with st.expander("ℹ️ Acerca de esta aplicación"):
     **Asistente de Investigación Digital** es una herramienta que integra:
     - Búsqueda web con la API de Tavily
     - Análisis de texto con OpenAI
-    - Visualización de datos con Matplotlib
+    - Visualización de datos con HTML/CSS
     - Interfaz interactiva con Streamlit
     
     El código fuente está disponible en el repositorio del proyecto.

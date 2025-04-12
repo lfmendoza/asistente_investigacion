@@ -1,65 +1,14 @@
 """
-Módulo para realizar búsquedas web utilizando Tavily a través de LangChain.
+Módulo para realizar búsquedas web utilizando la API de Tavily directamente.
 """
 import os
+import requests
 from typing import List, Dict, Any
-from langchain.tools import TavilySearchResults
-from langchain.agents import AgentExecutor, create_react_agent
-from langchain_openai import ChatOpenAI
-from langchain.prompts import PromptTemplate
-from langchain.schema import Document
-
-def inicializar_agente_busqueda() -> AgentExecutor:
-    """
-    Inicializa el agente ReAct de LangChain con la herramienta de búsqueda de Tavily.
-    
-    Returns:
-        AgentExecutor: Agente configurado para realizar búsquedas.
-    """
-    # Herramienta de búsqueda Tavily
-    search_tool = TavilySearchResults(
-        tavily_api_key=os.getenv("TAVILY_API_KEY"),
-        max_results=5,
-        include_raw_content=True,
-        include_domains=[],
-        exclude_domains=[]
-    )
-    
-    # Modelo de lenguaje para el agente
-    llm = ChatOpenAI(
-        model="gpt-4-mini",
-        temperature=0,
-        api_key=os.getenv("OPENAI_API_KEY")
-    )
-    
-    # Plantilla de prompt para el agente
-    template = """
-    Eres un asistente de investigación que ayuda a buscar información relevante en la web.
-    
-    Objetivo: Encontrar información actualizada y relevante sobre: {tema}
-    
-    Debes buscar contenido de fuentes confiables y diversas para proporcionar una visión completa del tema.
-    """
-    
-    prompt = PromptTemplate(
-        template=template,
-        input_variables=["tema"]
-    )
-    
-    # Crear el agente ReAct
-    agent = create_react_agent(llm, [search_tool], prompt)
-    agent_executor = AgentExecutor.from_agent_and_tools(
-        agent=agent, 
-        tools=[search_tool], 
-        verbose=True,
-        return_intermediate_steps=True
-    )
-    
-    return agent_executor
+import json
 
 def realizar_busqueda(tema: str) -> List[Dict[str, Any]]:
     """
-    Realiza una búsqueda sobre el tema especificado usando el agente ReAct.
+    Realiza una búsqueda sobre el tema especificado usando la API de Tavily directamente.
     
     Args:
         tema (str): El tema sobre el cual buscar información.
@@ -67,29 +16,52 @@ def realizar_busqueda(tema: str) -> List[Dict[str, Any]]:
     Returns:
         List[Dict[str, Any]]: Lista de resultados de la búsqueda.
     """
-    # Inicializar el agente
-    agente = inicializar_agente_busqueda()
+    # Obtener la API key de Tavily
+    api_key = os.getenv("TAVILY_API_KEY")
     
-    # Ejecutar la búsqueda
-    resultado = agente.invoke({"tema": tema})
+    if not api_key:
+        raise ValueError("No se encontró la clave API para Tavily. Verifica tu archivo .env")
     
-    # Procesar y formatear los resultados
-    resultados_formateados = []
+    # Configurar la petición a la API de Tavily
+    endpoint = "https://api.tavily.com/search"
+    headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+    }
     
-    # Extraer los resultados de los pasos intermedios
-    for paso in resultado["intermediate_steps"]:
-        # Verificar si es un resultado de búsqueda de Tavily
-        if isinstance(paso[1], list) and len(paso[1]) > 0 and isinstance(paso[1][0], dict):
-            for item in paso[1]:
-                if "title" in item and "content" in item and "url" in item:
-                    resultados_formateados.append({
-                        "titulo": item.get("title", "Sin título"),
-                        "contenido": item.get("content", "Sin contenido"),
-                        "url": item.get("url", "Sin URL"),
-                        "contenido_raw": item.get("raw_content", item.get("content", ""))
-                    })
+    payload = {
+        "api_key": api_key,
+        "query": tema,
+        "search_depth": "advanced",
+        "max_results": 5,
+        "include_raw_content": True,
+        "include_domains": [],
+        "exclude_domains": []
+    }
     
-    return resultados_formateados
+    try:
+        # Realizar la petición
+        response = requests.post(endpoint, headers=headers, json=payload)
+        response.raise_for_status()  # Verificar si hubo errores en la petición
+        
+        # Obtener los resultados
+        results = response.json().get("results", [])
+        
+        # Formatear los resultados
+        resultados_formateados = []
+        for item in results:
+            resultados_formateados.append({
+                "titulo": item.get("title", "Sin título"),
+                "contenido": item.get("content", "Sin contenido"),
+                "url": item.get("url", "Sin URL"),
+                "contenido_raw": item.get("raw_content", item.get("content", ""))
+            })
+        
+        return resultados_formateados
+    
+    except requests.exceptions.RequestException as e:
+        print(f"Error al realizar la búsqueda: {str(e)}")
+        return []
 
 def obtener_texto_completo(resultados: List[Dict[str, Any]]) -> str:
     """
