@@ -20,33 +20,38 @@ Esta aplicación web interactiva funciona como un asistente de investigación di
 ### Pasos de instalación
 
 1. Clonar el repositorio:
+
    ```bash
    git clone https://github.com/lfmendoza/asistente_investigacion.git
    cd asistente_investigacion
    ```
 
 2. Crear y activar un entorno virtual (opcional pero recomendado):
+
    ```bash
    python -m venv venv
-   
+
    # En Windows
    venv\Scripts\activate
-   
+
    # En macOS/Linux
    source venv/bin/activate
    ```
 
 3. Instalar las dependencias:
+
    ```bash
    pip install -r requirements.txt
    ```
 
 4. Configurar las claves API:
+
    ```bash
    cp .env.example .env
    ```
-   
+
    Edita el archivo `.env` y agrega tus claves API:
+
    ```
    OPENAI_API_KEY=tu_clave_de_openai
    TAVILY_API_KEY=tu_clave_de_tavily
@@ -55,6 +60,7 @@ Esta aplicación web interactiva funciona como un asistente de investigación di
 ## 💻 Uso
 
 1. Iniciar la aplicación:
+
    ```bash
    streamlit run app.py
    ```
@@ -86,6 +92,7 @@ asistente_investigacion/
 Este módulo se encarga de realizar búsquedas web utilizando la API de Tavily a través de LangChain. Implementa un agente ReAct que busca información relevante sobre el tema proporcionado por el usuario.
 
 Funciones principales:
+
 - `inicializar_agente_busqueda()`: Configura el agente ReAct con la herramienta de búsqueda.
 - `realizar_busqueda(tema)`: Ejecuta la búsqueda y procesa los resultados.
 - `obtener_texto_completo(resultados)`: Extrae todo el texto de los resultados para análisis posterior.
@@ -95,6 +102,7 @@ Funciones principales:
 Este módulo utiliza la API de OpenAI para analizar y procesar el texto obtenido de las búsquedas.
 
 Funciones principales:
+
 - `generar_resumen(texto, tema)`: Genera un resumen del contenido utilizando GPT-4-mini.
 - `preprocesar_texto_para_wordcloud(texto)`: Preprocesa el texto para generar una nube de palabras más relevante.
 
@@ -103,6 +111,7 @@ Funciones principales:
 Este módulo se encarga de generar visualizaciones a partir del texto procesado.
 
 Funciones principales:
+
 - `generar_nube_palabras(texto)`: Genera una nube de palabras a partir del texto.
 - `contar_palabras_frecuentes(texto, n)`: Cuenta las palabras más frecuentes en el texto.
 
@@ -112,7 +121,7 @@ Funciones principales:
 - **LangChain**: Para la integración de modelos de lenguaje y herramientas
 - **OpenAI API**: Para el procesamiento de lenguaje natural
 - **Tavily API**: Para la búsqueda de información en la web
-- **WordCloud y Matplotlib**: Para la visualización de datos
+- **Matplotlib**: Para la visualización de datos
 - **Python-dotenv**: Para la gestión de variables de entorno
 
 ## 📦 Requisitos
@@ -124,8 +133,8 @@ openai==1.12.0
 python-dotenv==1.0.0
 langchain==0.1.4
 langchain-openai==0.0.5
+tavily-python==0.2.8
 matplotlib==3.8.2
-wordcloud==1.9.2
 ```
 
 ## 🤔 Reflexión crítica sobre el uso de IA para buscar y procesar información
@@ -133,12 +142,14 @@ wordcloud==1.9.2
 El uso de inteligencia artificial para buscar y procesar información representa un avance significativo en la manera en que accedemos al conocimiento, pero también plantea importantes consideraciones:
 
 ### Ventajas
+
 - **Eficiencia**: La IA puede analizar grandes volúmenes de información en segundos, algo imposible para un humano.
 - **Acceso a información diversa**: Permite obtener una visión más amplia y variada sobre un tema específico.
 - **Reducción de sesgos humanos**: Potencialmente puede reducir algunos sesgos cognitivos presentes en la investigación humana.
 - **Personalización**: Adapta los resultados a necesidades específicas del usuario.
 
 ### Desafíos y limitaciones
+
 - **Calidad y veracidad**: La IA no siempre distingue información veraz de la falsa, pudiendo propagar desinformación.
 - **Sesgos algorítmicos**: Los sistemas pueden reflejar y amplificar sesgos presentes en sus datos de entrenamiento.
 - **Falta de pensamiento crítico**: La IA carece de la capacidad humana para evaluar críticamente el contexto y la fiabilidad de las fuentes.
@@ -146,6 +157,7 @@ El uso de inteligencia artificial para buscar y procesar información representa
 - **Burbujas informativas**: Los algoritmos pueden reforzar creencias existentes al mostrar información que coincide con preferencias previas.
 
 ### Consideraciones éticas
+
 - Es crucial mantener la transparencia sobre cuándo la información ha sido procesada por IA.
 - Los usuarios deben desarrollar alfabetización digital para evaluar críticamente los resultados.
 - El papel humano en la verificación y contextualización de la información sigue siendo insustituible.

@@ -12,7 +12,7 @@ load_dotenv()
 # Importar módulos personalizados
 from modulos.buscador import realizar_busqueda, obtener_texto_completo
 from modulos.procesador import generar_resumen, preprocesar_texto_para_wordcloud
-from modulos.visualizador import generar_nube_palabras, contar_palabras_frecuentes
+from modulos.visualizador import generar_grafico_palabras, contar_palabras_frecuentes
 
 # Configuración de la página
 st.set_page_config(
@@ -88,17 +88,17 @@ if boton_buscar and tema:
         estado.info("🔄 Procesando texto para visualización...")
         texto_procesado = preprocesar_texto_para_wordcloud(texto_completo)
         
-        # Generar nube de palabras
+        # Generar gráfico de palabras frecuentes
         estado.info("📊 Generando visualización...")
-        nube_palabras_img = generar_nube_palabras(texto_procesado)
+        grafico_palabras_img = generar_grafico_palabras(texto_procesado)
         
         # Crear columnas para visualizaciones
         col1, col2 = st.columns(2)
         
-        # Mostrar nube de palabras
+        # Mostrar gráfico de palabras
         with col1:
-            st.subheader("Nube de Palabras")
-            st.markdown(f'<img src="data:image/png;base64,{nube_palabras_img}" alt="Nube de palabras" width="100%">', unsafe_allow_html=True)
+            st.subheader("Frecuencia de Palabras")
+            st.markdown(f'<img src="data:image/png;base64,{grafico_palabras_img}" alt="Gráfico de palabras frecuentes" width="100%">', unsafe_allow_html=True)
         
         # Contar palabras frecuentes
         palabras_frecuentes = contar_palabras_frecuentes(texto_procesado, n=15)
