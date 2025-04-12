@@ -4,18 +4,18 @@ Esta aplicación web interactiva funciona como un asistente de investigación di
 
 ## 📋 Características
 
-- Búsqueda web con la API de Tavily a través de un agente ReAct de LangChain
+- Búsqueda web con la API de Tavily directamente con requests
 - Presentación amigable de resultados (título, contenido, enlaces)
-- Generación automática de resúmenes con OpenAI (GPT-4-mini)
-- Visualización interactiva con nubes de palabras
+- Generación automática de resúmenes con OpenAI
+- Visualización interactiva de las palabras más frecuentes
 - Interfaz de usuario intuitiva desarrollada con Streamlit
 
 ## 🚀 Instalación
 
 ### Requisitos previos
 
-- Python 3.9 o superior
-- Claves API para OpenAI y Tavily
+- Python 3.8 o superior
+- Claves API para OpenAI y Tavily (opcional, la aplicación funciona en modo simulado sin ellas)
 
 ### Pasos de instalación
 
@@ -44,7 +44,7 @@ Esta aplicación web interactiva funciona como un asistente de investigación di
    pip install -r requirements.txt
    ```
 
-4. Configurar las claves API:
+4. Configurar las claves API (opcional):
 
    ```bash
    cp .env.example .env
@@ -62,7 +62,7 @@ Esta aplicación web interactiva funciona como un asistente de investigación di
 1. Iniciar la aplicación:
 
    ```bash
-   streamlit run app.py
+   streamlit run app_simple.py
    ```
 
 2. Abrir el navegador en la dirección mostrada (generalmente http://localhost:8501)
@@ -76,51 +76,51 @@ Esta aplicación web interactiva funciona como un asistente de investigación di
 ```
 asistente_investigacion/
 ├── .env.example                # Plantilla para las claves de API
+├── .env                        # Archivo para tus claves API (debes crearlo)
 ├── README.md                   # Documentación del proyecto
-├── app.py                      # Punto de entrada principal de Streamlit
+├── app_simple.py               # Aplicación principal (versión simplificada)
+├── requirements.txt            # Dependencias del proyecto
 └── modulos/
     ├── __init__.py             # Hace que el directorio sea un paquete
-    ├── buscador.py             # Módulo para la búsqueda con Tavily
+    ├── buscador_alternative.py # Módulo para la búsqueda (versión alternativa)
     ├── procesador.py           # Módulo para procesamiento con OpenAI
-    └── visualizador.py         # Módulo para visualización (WordCloud)
+    └── visualizador_simple.py  # Módulo para visualización simplificada
 ```
 
 ## 📚 Descripción de los módulos
 
-### `modulos/buscador.py`
+### `buscador_alternative.py`
 
-Este módulo se encarga de realizar búsquedas web utilizando la API de Tavily a través de LangChain. Implementa un agente ReAct que busca información relevante sobre el tema proporcionado por el usuario.
+Este módulo se encarga de realizar búsquedas web simuladas. Cuando no se dispone de una clave API de Tavily válida, genera resultados simulados basados en el tema proporcionado.
 
 Funciones principales:
 
-- `inicializar_agente_busqueda()`: Configura el agente ReAct con la herramienta de búsqueda.
-- `realizar_busqueda(tema)`: Ejecuta la búsqueda y procesa los resultados.
+- `realizar_busqueda(tema)`: Simula una búsqueda web sobre el tema especificado.
 - `obtener_texto_completo(resultados)`: Extrae todo el texto de los resultados para análisis posterior.
 
-### `modulos/procesador.py`
+### `procesador.py`
 
-Este módulo utiliza la API de OpenAI para analizar y procesar el texto obtenido de las búsquedas.
-
-Funciones principales:
-
-- `generar_resumen(texto, tema)`: Genera un resumen del contenido utilizando GPT-4-mini.
-- `preprocesar_texto_para_wordcloud(texto)`: Preprocesa el texto para generar una nube de palabras más relevante.
-
-### `modulos/visualizador.py`
-
-Este módulo se encarga de generar visualizaciones a partir del texto procesado.
+Este módulo utiliza la API de OpenAI para analizar y procesar el texto obtenido de las búsquedas. Incluye mecanismos de respaldo para funcionar sin una clave API de OpenAI.
 
 Funciones principales:
 
-- `generar_nube_palabras(texto)`: Genera una nube de palabras a partir del texto.
+- `generar_resumen(texto, tema)`: Genera un resumen del contenido utilizando OpenAI o un generador simulado.
+- `preprocesar_texto_para_wordcloud(texto)`: Preprocesa el texto para la visualización de palabras frecuentes.
+
+### `visualizador_simple.py`
+
+Este módulo se encarga de generar visualizaciones a partir del texto procesado, utilizando HTML/CSS en lugar de bibliotecas externas como matplotlib.
+
+Funciones principales:
+
 - `contar_palabras_frecuentes(texto, n)`: Cuenta las palabras más frecuentes en el texto.
+- `generar_tabla_html(palabras_frecuentes)`: Genera una tabla HTML con barras de progreso para representar la frecuencia de palabras.
 
 ## 🛠️ Tecnologías utilizadas
 
 - **Streamlit**: Para la interfaz de usuario web
 - **OpenAI API**: Para el procesamiento de lenguaje natural
 - **Tavily API**: Para la búsqueda de información en la web
-- **Matplotlib**: Para la visualización de datos
 - **Python-dotenv**: Para la gestión de variables de entorno
 
 ## 📦 Requisitos
@@ -130,7 +130,6 @@ streamlit==1.32.0
 requests==2.31.0
 openai==1.12.0
 python-dotenv==1.0.0
-matplotlib==3.8.2
 ```
 
 ## 🤔 Reflexión crítica sobre el uso de IA para buscar y procesar información
@@ -163,10 +162,3 @@ Esta aplicación busca ser una herramienta complementaria que potencie las capac
 ## 📄 Licencia
 
 Este proyecto está bajo la Licencia MIT - ver el archivo LICENSE para más detalles.
-
-## 🙏 Agradecimientos
-
-- Equipo de OpenAI por proporcionar la API para el procesamiento de lenguaje natural
-- Equipo de Tavily por su API de búsqueda web
-- Comunidad de Streamlit por crear una herramienta tan versátil para aplicaciones web en Python
-- Desarrolladores de LangChain por facilitar la integración de modelos de lenguaje con herramientas
