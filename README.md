@@ -22,8 +22,8 @@ Esta aplicación web interactiva funciona como un asistente de investigación di
 1. Clonar el repositorio:
 
    ```bash
-   git clone https://github.com/tu-usuario/asistente-investigacion.git
-   cd asistente-investigacion
+   git clone https://github.com/lfmendoza/asistente_investigacion.git
+   cd asistente_investigacion
    ```
 
 2. Crear y activar un entorno virtual (opcional pero recomendado):
@@ -57,6 +57,18 @@ Esta aplicación web interactiva funciona como un asistente de investigación di
    TAVILY_API_KEY=tu_clave_de_tavily
    ```
 
+## 📋 Resultados de pruebas
+
+En la raíz del proyecto se encuentran varios archivos PDF que contienen los resultados de diferentes pruebas realizadas con la aplicación:
+
+- `Asistente de Investigación Digital.pdf` - Prueba principal del funcionamiento completo
+- `Asistente de Investigación Digital-2.pdf` - Prueba de búsquedas sobre temas tecnológicos
+- `Asistente de Investigación Digital-3.pdf` - Prueba de búsquedas sobre temas científicos
+- `Asistente de Investigación Digital-4.pdf` - Prueba de búsquedas sobre temas educativos
+- `Asistente de Investigación Digital-5.pdf` - Prueba de funcionamiento con API simulada
+
+Estos archivos demuestran el correcto funcionamiento de la aplicación en diferentes escenarios y con distintos tipos de consultas.
+
 ## 💻 Uso
 
 1. Iniciar la aplicación:
@@ -75,16 +87,21 @@ Esta aplicación web interactiva funciona como un asistente de investigación di
 
 ```
 asistente_investigacion/
-├── .env.example                # Plantilla para las claves de API
-├── .env                        # Archivo para tus claves API (debes crearlo)
-├── README.md                   # Documentación del proyecto
-├── app_simple.py               # Aplicación principal (versión simplificada)
-├── requirements.txt            # Dependencias del proyecto
+├── Asistente de Investigación Digital.pdf     # Prueba principal
+├── Asistente de Investigación Digital-2.pdf   # Prueba con temas tecnológicos
+├── Asistente de Investigación Digital-3.pdf   # Prueba con temas científicos
+├── Asistente de Investigación Digital-4.pdf   # Prueba con temas educativos
+├── Asistente de Investigación Digital-5.pdf   # Prueba con API simulada
+├── .env.example                               # Plantilla para las claves de API
+├── .env                                       # Archivo para tus claves API (debes crearlo)
+├── README.md                                  # Documentación del proyecto
+├── app_simple.py                              # Aplicación principal (versión simplificada)
+├── requirements.txt                           # Dependencias del proyecto
 └── modulos/
-    ├── __init__.py             # Hace que el directorio sea un paquete
-    ├── buscador_alternative.py # Módulo para la búsqueda (versión alternativa)
-    ├── procesador.py           # Módulo para procesamiento con OpenAI
-    └── visualizador_simple.py  # Módulo para visualización simplificada
+    ├── __init__.py                            # Hace que el directorio sea un paquete
+    ├── buscador_alternative.py                # Módulo para la búsqueda (versión alternativa)
+    ├── procesador.py                          # Módulo para procesamiento con OpenAI
+    └── visualizador_simple.py                 # Módulo para visualización simplificada
 ```
 
 ## 📚 Descripción de los módulos
@@ -162,3 +179,4 @@ Esta aplicación busca ser una herramienta complementaria que potencie las capac
 ## 📄 Licencia
 
 Este proyecto está bajo la Licencia MIT - ver el archivo LICENSE para más detalles.
+s
